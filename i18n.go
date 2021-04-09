@@ -126,7 +126,7 @@ func parseIniFile(iniByte []byte) TMsgs {
 		splitIdx := strings.Index(str, "=")
 		if splitIdx > -1 {
 			key := strings.TrimSpace(str[0:splitIdx])
-			val := strings.TrimSpace(str[splitIdx:])
+			val := strings.TrimSpace(str[splitIdx+1:])
 			if len(title) > 0 {
 				key = title + "." + key
 			}
