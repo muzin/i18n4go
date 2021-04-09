@@ -1,0 +1,1 @@
+module "github.com/muzin/i18n4go"
