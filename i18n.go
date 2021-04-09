@@ -10,9 +10,7 @@ import (
 type TMsgs map[string]string
 
 type I18N struct {
-
 	Locales map[string]*Locale
-
 }
 
 func NewI18N() *I18N {
@@ -25,7 +23,7 @@ func (this *I18N) getLocale(lang string) (*Locale, error) {
 	locale, ok := this.Locales[lang]
 	if ok {
 		return locale, nil
-	}else{
+	} else {
 		return nil, errors.New("not exists")
 	}
 }
@@ -33,16 +31,31 @@ func (this *I18N) getLocale(lang string) (*Locale, error) {
 // 通过 文件 加载 配置信息
 func (this *I18N) LoadLocale(lang string, iniPath string) error {
 	_, err := os.Lstat(iniPath)
-	if(!os.IsNotExist(err)){
+	if !os.IsNotExist(err) {
 		fileByte, err := ioutil.ReadFile(iniPath)
-		if err != nil{
+		if err != nil {
 			return err
-		}else{
+		} else {
 			return this.LoadLocaleFromStream(lang, fileByte)
 		}
-	}else{
+	} else {
 		return errors.New(iniPath + " is not exists")
 	}
+}
+
+// 通过 文件 内容 加载 配置信息
+func (this *I18N) LoadLocaleFromString(lang string, iniStr string) error {
+
+	tMsgs := parseIniFile([]byte(iniStr))
+
+	locale := &Locale{
+		Language: lang,
+		TMsgs:    tMsgs,
+	}
+
+	this.Locales[lang] = locale
+
+	return nil
 }
 
 // 通过 文件 内容 加载 配置信息
@@ -60,23 +73,19 @@ func (this *I18N) LoadLocaleFromStream(lang string, iniByte []byte) error {
 	return nil
 }
 
-
 type Locale struct {
-	Language     string
-	TMsgs	TMsgs
+	Language string
+	TMsgs    TMsgs
 }
 
 func (this *Locale) GetMessage(name string) string {
 	val, ok := this.TMsgs[name]
 	if ok {
 		return val
-	}else{
+	} else {
 		return ""
 	}
 }
-
-
-
 
 // 解析 ini 的内容 加载 配置信息
 func parseIniFile(iniByte []byte) TMsgs {
@@ -108,8 +117,8 @@ func parseIniFile(iniByte []byte) TMsgs {
 		titleStartIdx := strings.Index(strWithoutSpace, "[")
 		titleEndIdx := strings.Index(strWithoutSpace, "]")
 		if titleStartIdx == 0 &&
-				titleEndIdx == (len(strWithoutSpace) - 1) {
-			title = strings.TrimSpace(strWithoutSpace[(titleStartIdx+1):titleEndIdx])
+			titleEndIdx == (len(strWithoutSpace)-1) {
+			title = strings.TrimSpace(strWithoutSpace[(titleStartIdx + 1):titleEndIdx])
 			continue
 		}
 

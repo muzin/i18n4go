@@ -1,4 +1,6 @@
 # i18n4go
+i18n4go is Go i18n library.
+
 
 ## Install
 ```shell
