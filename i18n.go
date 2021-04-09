@@ -19,7 +19,7 @@ func NewI18N() *I18N {
 	return i18n
 }
 
-func (this *I18N) getLocale(lang string) (*Locale, error) {
+func (this *I18N) GetLocale(lang string) (*Locale, error) {
 	locale, ok := this.Locales[lang]
 	if ok {
 		return locale, nil
